@@ -2,6 +2,7 @@ package com.arjun.springbootrestapi.controller;
 
 import com.arjun.springbootrestapi.bean.Student;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,66 +12,71 @@ import java.util.List;
 public class StudentController {
 
     @GetMapping("student")
-    public Student getStudent(){
+    public ResponseEntity<Student> getStudent(){
         Student student = new Student(
                 1,
                 "Arjun",
                 "C"
         );
-        return student;
+//        return new ResponseEntity<>( student, HttpStatus.OK);
+//        return ResponseEntity.ok(student);
+        return ResponseEntity.ok().header("custom-header","arjun")
+                .body(student);
     }
 
     @GetMapping("students")
-    public List<Student> getStudents(){
+    public ResponseEntity<List<Student>> getStudents(){
         List<Student> students = new ArrayList<>();
         students.add(new Student(1,"Arjun","C"));
         students.add(new Student(2,"Abhi","A"));
         students.add(new Student(3,"Abi","S"));
-        return students;
+        return ResponseEntity.ok(students);
     }
 
 //    http://localhost:8080/students/1/arjun/c
     @GetMapping("students/{id}/{first-name}/{last-name}")
-    public Student studentPathVariable(@PathVariable int id,   //Here the id is same as the parameter
+    public ResponseEntity<Student> studentPathVariable(@PathVariable int id,   //Here the id is same as the parameter
                                        @PathVariable("first-name") String firstName,
                                        @PathVariable("last-name") String lastName){
-        return new Student(id,firstName,lastName);
+        Student student =  new Student(id,firstName,lastName);
+        return ResponseEntity.ok(student);
     }
 
 //    http://localhost:8080/students/query?id=1
 //    http://localhost:8080/students/query?id=1&firstName=Arjun&lastName=c
     @GetMapping("students/query")
-    public Student studentRequestVariable(@RequestParam int id,
+    public ResponseEntity<Student> studentRequestVariable(@RequestParam int id,
                                           @RequestParam String firstName,
                                           @RequestParam String lastName){
-        return new Student(id,firstName,lastName);
+        Student student = new Student(id,firstName,lastName);
+        return ResponseEntity.ok(student);
 
     }
 
 //    Spring Boot REST API that handles HTTP POST Reqyest
     @PostMapping("students/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Student createStudent(@RequestBody  Student student){
+    public ResponseEntity<Student> createStudent(@RequestBody  Student student){
         System.out.println(student.getId());
         System.out.println(student.getFirstName());
         System.out.println(student.getLastName());
 
-        return student;
+        return new ResponseEntity<>(student,HttpStatus.CREATED);
     }
 
     //    Spring Boot REST API that handles HTTP POST Reqyest
 
     @PutMapping("students/{id}/update")
 //    @ResponseStatus(HttpStatus.ACCEPTED) Manually give 200OK
-    public Student updateStudent(@RequestBody Student student,@PathVariable("id") int studentId){
+    public ResponseEntity<Student> updateStudent(@RequestBody Student student,@PathVariable("id") int studentId){
         System.out.println(student.getFirstName());
         System.out.println(student.getLastName());
-        return student;
+        return ResponseEntity.ok(student);
     }
 
     @DeleteMapping("students/{id}/delete")
-    public String deleteStudent( @PathVariable("id") int studentId){
-        return "Student Deleted Succefully";
+    public ResponseEntity<String> deleteStudent( @PathVariable("id") int studentId){
+        return ResponseEntity.ok("Student Deleted Succefully");
     }
 
 }

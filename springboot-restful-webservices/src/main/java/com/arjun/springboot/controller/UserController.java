@@ -1,5 +1,6 @@
 package com.arjun.springboot.controller;
 
+import com.arjun.springboot.dto.UserDto;
 import com.arjun.springboot.entity.User;
 import com.arjun.springboot.service.UserService;
 import com.arjun.springboot.service.impl.UserServiceImpl;
@@ -20,31 +21,37 @@ public class UserController {
     private UserService userService;
 
 //    build create User REST API
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody User user){
+//        User savedUser = userService.createUser(user);
+//        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+//    }
+
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        User savedUser = userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
+        UserDto savedUser = userService.createUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     //    build get user by id REST API
 //      http://localhots:8080/api/users/1
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId){
-        User user =userService.getUserById(userId);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long userId){
+        UserDto user =userService.getUserById(userId);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> users =userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        List<UserDto> users =userService.getAllUsers();
         return new ResponseEntity<>(users,HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
-                                           @RequestBody User user){
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId,
+                                           @RequestBody UserDto user){
         user.setId(userId);
-        User updatedUser = userService.updateUser(user);
+        UserDto updatedUser = userService.updateUser(user);
         return new ResponseEntity<>(updatedUser,HttpStatus.OK);
     }
 

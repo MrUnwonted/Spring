@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("students")
 public class StudentController {
 
     @GetMapping("student")
@@ -24,7 +25,7 @@ public class StudentController {
                 .body(student);
     }
 
-    @GetMapping("students")
+    @GetMapping()
     public ResponseEntity<List<Student>> getStudents(){
         List<Student> students = new ArrayList<>();
         students.add(new Student(1,"Arjun","C"));
@@ -34,7 +35,7 @@ public class StudentController {
     }
 
 //    http://localhost:8080/students/1/arjun/c
-    @GetMapping("students/{id}/{first-name}/{last-name}")
+    @GetMapping("{id}/{first-name}/{last-name}")
     public ResponseEntity<Student> studentPathVariable(@PathVariable int id,   //Here the id is same as the parameter
                                        @PathVariable("first-name") String firstName,
                                        @PathVariable("last-name") String lastName){
@@ -44,7 +45,7 @@ public class StudentController {
 
 //    http://localhost:8080/students/query?id=1
 //    http://localhost:8080/students/query?id=1&firstName=Arjun&lastName=c
-    @GetMapping("students/query")
+    @GetMapping("query")
     public ResponseEntity<Student> studentRequestVariable(@RequestParam int id,
                                           @RequestParam String firstName,
                                           @RequestParam String lastName){
@@ -54,7 +55,7 @@ public class StudentController {
     }
 
 //    Spring Boot REST API that handles HTTP POST Reqyest
-    @PostMapping("students/create")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Student> createStudent(@RequestBody  Student student){
         System.out.println(student.getId());
@@ -66,7 +67,7 @@ public class StudentController {
 
     //    Spring Boot REST API that handles HTTP POST Reqyest
 
-    @PutMapping("students/{id}/update")
+    @PutMapping("{id}/update")
 //    @ResponseStatus(HttpStatus.ACCEPTED) Manually give 200OK
     public ResponseEntity<Student> updateStudent(@RequestBody Student student,@PathVariable("id") int studentId){
         System.out.println(student.getFirstName());
@@ -74,7 +75,7 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @DeleteMapping("students/{id}/delete")
+    @DeleteMapping("{id}/delete")
     public ResponseEntity<String> deleteStudent( @PathVariable("id") int studentId){
         return ResponseEntity.ok("Student Deleted Succefully");
     }

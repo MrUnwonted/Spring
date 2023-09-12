@@ -2,6 +2,8 @@ package com.arjun.springboot.controller;
 
 import com.arjun.springboot.dto.UserDto;
 import com.arjun.springboot.entity.User;
+import com.arjun.springboot.exception.ErrorDetails;
+import com.arjun.springboot.exception.ResourceNotFoundException;
 import com.arjun.springboot.service.UserService;
 import com.arjun.springboot.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
@@ -10,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -60,5 +64,18 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("User successfully deleted!",HttpStatus.OK);
     }
+
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
+//                                                                        WebRequest webRequest){
+//        ErrorDetails errorDetails = new ErrorDetails(
+//                LocalDateTime.now(),
+//                exception.getMessage(),
+//                webRequest.getDescription(false),
+//                "USER_NOT_FOUND"
+//        );
+//
+//        return new ResponseEntity<>(errorDetails,HttpStatus.NOT_FOUND);
+//    }
 
 }

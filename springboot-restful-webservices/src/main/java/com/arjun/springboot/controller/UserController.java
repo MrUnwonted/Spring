@@ -1,20 +1,13 @@
 package com.arjun.springboot.controller;
-
 import com.arjun.springboot.dto.UserDto;
-import com.arjun.springboot.entity.User;
-import com.arjun.springboot.exception.ErrorDetails;
-import com.arjun.springboot.exception.ResourceNotFoundException;
 import com.arjun.springboot.service.UserService;
-import com.arjun.springboot.service.impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 @RestController
@@ -32,7 +25,7 @@ public class UserController {
 //    }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user){
         UserDto savedUser = userService.createUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
@@ -53,7 +46,7 @@ public class UserController {
 
     @PutMapping("{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId,
-                                           @RequestBody UserDto user){
+                                           @RequestBody @Valid UserDto user){
         user.setId(userId);
         UserDto updatedUser = userService.updateUser(user);
         return new ResponseEntity<>(updatedUser,HttpStatus.OK);

@@ -2,6 +2,7 @@ package com.arjun.springboot.service.impl;
 
 import com.arjun.springboot.dto.UserDto;
 import com.arjun.springboot.entity.User;
+import com.arjun.springboot.exception.EmailAlreadyExistsException;
 import com.arjun.springboot.exception.ResourceNotFoundException;
 import com.arjun.springboot.mapper.AutoUserMapper;
 import com.arjun.springboot.mapper.UserMapper;
@@ -34,6 +35,13 @@ public class UserServiceImpl implements UserService {
 //        User user = UserMapper.mapToUser(userDto);
 
 //        User user = modelMapper.map(userDto,User.class);
+
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (optionalUser.isPresent()){
+            throw new EmailAlreadyExistsException("Email Already Exists for User");
+        }
+
         User user = AutoUserMapper.MAPPER.mapToUser(userDto);
 
         User savedUser = userRepository.save(user);
